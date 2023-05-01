@@ -111,6 +111,22 @@ const appState: AppState = {
   projectsState: initialProjectState,
 };
 
+class ProjectsStore {
+  state: ProjectsState;
+
+  constructor(state: ProjectsState) {
+    this.state = state;
+  }
+
+  select(key: keyof typeof this.state) {
+    return this.state[key];
+  }
+
+  getState() {
+    return this.state;
+  }
+}
+
 const tango = clientsStore;
 
 @Component({
