@@ -10,6 +10,11 @@ interface Client extends BaseEntity {
   company: string;
 }
 
+interface Action {
+  type: string;
+  payload?: any;
+}
+
 const peter: Client = {
   id: '1',
   firstName: 'Peter',
@@ -38,7 +43,7 @@ const newClient: Client = {
   company: '',
 };
 
-const initialState: ClientsState = {
+const initialClientsState: ClientsState = {
   clients,
   currentClient: newClient,
 };
@@ -54,12 +59,43 @@ class ClientsStore {
     return this.state;
   }
 
-  select(key: keyof ClientsState) {
+  select(key: keyof typeof this.state) {
     return this.state[key];
   }
 }
 
-const clientsStore = new ClientsStore(initialState);
+const CLIENT_LOAD = '[Client] Load';
+const CLIENT_CREATE = '[Client] Create';
+const CLIENT_UPDATE = '[Client] Update';
+const CLIENT_DELETE = '[Client] Delete';
+const CLIENT_SELECT = '[Client] Select';
+const CLIENT_CLEAR = '[Client] Clear';
+
+function loadClient(state: ClientsState, clients: any) {
+  return state;
+}
+
+function selectClient(state: ClientsState, client: any) {
+  return state;
+}
+
+const clientsReducer = (
+  state: ClientsState = initialClientsState,
+  action: Action
+) => {
+  switch (action.type) {
+    case CLIENT_LOAD:
+      return loadClient(state, action.payload);
+
+    case CLIENT_SELECT:
+      return selectClient(state, action.payload);
+
+    default:
+      return state;
+  }
+};
+
+const clientsStore = new ClientsStore(initialClientsState);
 const currentClient = clientsStore.select('currentClient');
 
 interface Project extends BaseEntity {
@@ -107,7 +143,7 @@ interface AppState {
 }
 
 const appState: AppState = {
-  clientsState: initialState,
+  clientsState: initialClientsState,
   projectsState: initialProjectState,
 };
 
