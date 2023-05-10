@@ -28,7 +28,7 @@ import { map } from 'rxjs/internal/operators';
 })
 export class InputComponent implements OnInit {
   searchControl: FormControl = new FormControl('');
-  queryString;
+  queryString: string;
 
   ngOnInit() {
     // -------------------------------------------------------------------
@@ -39,5 +39,11 @@ export class InputComponent implements OnInit {
     // Reverse the output i.e. Lukas becomes sakuL
     // BONUS: How would you URL encode the output?
     // -------------------------------------------------------------------
+
+    this.searchControl.valueChanges
+      .pipe(
+        map((value: string) => value.toUpperCase().split('').reverse().join(''))
+      )
+      .subscribe((value) => (this.queryString = value));
   }
 }
